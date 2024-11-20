@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Contador";
+}
+
+<div class="text-center">
+    <div class="container-fluid d-flex flex-row">
+            <nav class="nav flex-column">
+            <img src="~/static/menu.png" class="nav-icon">
+            <img src="~/static/calendar3.svg" class="nav-icon">
+            <img src="~/static/caja-cuadrada.png" class="nav-icon">
+            <img src="~/static/clock.svg" class="nav-icon">
+            <img src="~/static/posicion.png" class="nav-icon">
+            <img src="~/static/gear.svg" class="nav-icon">
+            </nav>
+            <main class="page-content">
+                <h3>Nombre del contador</h3>
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Finca</li>
+                        <li class="breadcrumb-item">Atlas</li>
+                        <li class="breadcrumb-item">Nombre de Atlas</li>
+                        <li class="breadcrumb-item">Nombre del contador</li>
+                    </ol>
+                </nav>
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="card">
+                                <p>Caudal instantáneo</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <p>Acumulado 24h</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <p>Acumulado total</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <p>Caudal nominal</p>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <p>Atlas 03</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid d-flex flex-row">
+                    <div class="container">
+                        <!-- Sección del gráfico y tipo de gráfico -->
+                        <div class="container" >
+                            <select id='tipo-grafico' class="form-select" aria-label="Default select example" >
+                                <option value='Acumulado' selected>Acumulado</option>
+                                <option value="Caudal">Caudal</option>
+                            </select>
+                        </div>
+                        <div id="devexpress-container"></div>
+                    </div>
+                    <div class="container">
+                        <!-- Sección de última conexión, 24 h, mensaje etc-->
+                         <p>Última conexión:</p>
+                         <div id="graph-time-intervals" class="list-group list-group-horizontal">
+                            <button type="button" class="list-group-item list-group-item-action active" aria-current="true">24 H</button>
+                            <button type="button" class="list-group-item list-group-item-action">48 H</button>
+                            <button type="button" class="list-group-item list-group-item-action">7 D</button>
+                            <button type="button" class="list-group-item list-group-item-action">30 D</button>
+                            <button type="button" class="list-group-item list-group-item-action">Cal</button>
+                         </div>
+                         <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                    <img src="static/database.svg" class="nav-icon" />
+                                    </th>
+                                    <th>Mensaje</th>
+                                    <th>Dato</th>
+                                    <th>Fecha</th>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Creación</td>
+                                    <td></td>
+                                    <td>05/09/2023</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Edición</td>
+                                    <td></td>
+                                    <td>05/09/2023</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Actualización</td>
+                                    <td></td>
+                                    <td>05/09/2023</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Actualización</td>
+                                    <td></td>
+                                    <td>05/09/2023</td>
+                                </tr>
+                            </thead>
+                         </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+</div>
+

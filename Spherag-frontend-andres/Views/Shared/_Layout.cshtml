@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="es-ES">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdn3.devexpress.com/jslib/23.1.4/css/dx.light.css" rel="stylesheet">
+    <link rel="icon" href="https://spherag.com/wp-content/uploads/2024/04/cropped-Icon_spherag-32x32.png" sizes="32x32">
+    <link rel="stylesheet" href="~/Spherag_frontend_andres.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="header">
+        <div style="width: 50%;display: flex;flex-direction: row;">
+            <img src="static/Icon_spherag.png" class="spherag-logo" />
+            <img src="static/list.svg" class="nav-icon" />
+            <div style="width: 50%;">
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Mi finca</option>
+                    <option value="1">Campo 1</option>
+                    <option value="2">Campo 2</option>
+                    <option value="3">Campo 3</option>
+                </select>
+            </div>
+        </div>
+        <div class="user-menu">
+            <img src="static/bell.svg" class="nav-icon" />
+            <img src="static/info-circle.svg" class="nav-icon" />
+            <img src="static/person-circle.svg" class="nav-icon" />
+            <p>correo@correousuario.com</p>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Spherag_frontend_andres - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/23.1.4/js/dx.all.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

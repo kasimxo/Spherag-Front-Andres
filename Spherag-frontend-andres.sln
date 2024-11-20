@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spherag-frontend-andres", "Spherag-frontend-andres\Spherag-frontend-andres.csproj", "{B40577DF-0BD9-4F02-9FC5-CDFCE114110E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B40577DF-0BD9-4F02-9FC5-CDFCE114110E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40577DF-0BD9-4F02-9FC5-CDFCE114110E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40577DF-0BD9-4F02-9FC5-CDFCE114110E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40577DF-0BD9-4F02-9FC5-CDFCE114110E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68934529-D9BD-4F1F-BCAA-9EEC38E463C1}
+	EndGlobalSection
+EndGlobal
