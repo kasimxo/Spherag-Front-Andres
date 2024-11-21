@@ -4,13 +4,13 @@ namespace Spherag_frontend_andres.Services
 {
     public class ApiResponse
     {
-        public required Int32 AtlasElementId { get; set; }
-        public required float BatteryPercentage { get; set; }
-        public required float SignalPercentage { get; set; }
-        public required string LastUpdatedDate { get; set; }
-        public required string Gmt { get; set; }
-        public required string CreationDate { get; set; }
-        public required string AtlasEnd { get; set; }
+        public Int32? AtlasElementId { get; set; }
+        public float? BatteryPercentage { get; set; }
+        public float? SignalPercentage { get; set; }
+        public string? LastUpdatedDate { get; set; }
+        public string? Gmt { get; set; }
+        public string? CreationDate { get; set; }
+        public string? AtlasEnd { get; set; }
         public AccumulatedFlowData? AccumulatedFlowData { get; set; }
         public FlowRateData? FlowRateData { get; set; }
         public string? SensorData { get; set; }
@@ -22,10 +22,10 @@ namespace Spherag_frontend_andres.Services
         public Log[]? Logs {get;set;}
         public DataStamp[]? Data { get; set; }
         public string? Channel { get; set; }
-        public Int32 UnitTypeId { get; set; }
+        public Int32? UnitTypeId { get; set; }
         public required string Name { get; set; }
         public required string Symbol { get; set; }
-        public Int32 UnitTypeGroupId { get; set; }
+        public Int32? UnitTypeGroupId { get; set; }
         
     }
     public class FlowRateData {

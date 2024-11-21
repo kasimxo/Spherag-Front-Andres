@@ -4,7 +4,8 @@
 
     $('#graph-time-intervals').children().each(function (index) {
         $(this).on('click', (btn) => {
-            changeGraphInterval(index)
+            let tipo = $('#tipo-grafico')[0].value
+            createGraph(tipo, this.innerText)
             $('#graph-time-intervals > .active').removeClass('active')
             $(this).addClass('active')
         })
@@ -12,7 +13,7 @@
 
     //TO-DO: change chart type
     $('#tipo-grafico').on('change', (e) => {
-        let interval = $('#graph-time-intervals > .active')[0].value
+        let interval = $('#graph-time-intervals > .active')[0].innerText
         console.log('org interval', interval, $('#graph-time-intervals > .active')[0])
         //Como el value debería ser el index del boton, igual nos renta mas tirar simplemente por texto
         createGraph(e.target.value, interval)
@@ -61,7 +62,7 @@ async function createGraph(type, interval) {
     let data;
     let dataRaw;
     let start = calculateStart(interval);
-    let end = new Date();
+    let end = new Date()-0;
     //the only time end is not now, is if its a custom interval
     switch (type) {
         case 'Acumulado':
@@ -107,7 +108,7 @@ async function createGraph(type, interval) {
 
 
 async function getDataAcumulado(start, end) {
-    console.log(start, end);
+    console.log("start: ",start,"end: ", end);
     let data = await $.ajax({
         url: '/Home/GetDataAcumulado',
         type: 'GET',
@@ -143,15 +144,15 @@ function calculateStart(interval) {
     * 4 for custom time frame(open calendar)
     * */
     switch (interval) {
-        case 0:
+        case "24 H":
             return new Date() - 24 * 3600 * 1000
-        case 1:
+        case "48 H":
             return new Date() - 48 * 3600 * 1000
-        case 2:
+        case "7 D":
             return new Date() - 24 * 3600 * 1000 * 7
-        case 3:
+        case "30 D":
             return new Date() - 24 * 3600 * 1000 * 30
-        case 4:
+        case "Cal":
         default:
             return null;
     }
