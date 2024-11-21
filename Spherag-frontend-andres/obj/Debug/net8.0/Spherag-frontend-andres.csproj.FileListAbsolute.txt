@@ -28,3 +28,4 @@ C:\Users\User\Desktop\Spherag-frontend-andres\Spherag-frontend-andres\obj\Debug\
 C:\Users\User\Desktop\Spherag-frontend-andres\Spherag-frontend-andres\obj\Debug\net8.0\Spherag-frontend-andres.pdb
 C:\Users\User\Desktop\Spherag-frontend-andres\Spherag-frontend-andres\obj\Debug\net8.0\Spherag-frontend-andres.genruntimeconfig.cache
 C:\Users\User\Desktop\Spherag-frontend-andres\Spherag-frontend-andres\obj\Debug\net8.0\ref\Spherag-frontend-andres.dll
+C:\Users\User\Desktop\Spherag-frontend-andres\Spherag-frontend-andres\obj\Debug\net8.0\Spherag-frontend-andres.sourcelink.json

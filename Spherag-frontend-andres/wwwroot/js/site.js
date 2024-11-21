@@ -57,7 +57,7 @@ $(document).ready(function () {
     //TO-DO: change chart type
     $('#tipo-grafico').on('change', (e) => { createGraph(e.target.value,0) })
     //Ejemplo de petición ajax al controlador
-    $('#debug-btn').on('click', function () {
+    $('#btn-test-api').on('click', function () {
         $.ajax({
             url: '/Home/DoSomething',
             type: 'GET',
