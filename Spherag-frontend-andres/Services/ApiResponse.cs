@@ -55,7 +55,7 @@ namespace Spherag_frontend_andres.Services
     }
 
     public class DataStamp { 
-        public float Vvalue { get; set; }
-        public Int64 TS { get; set; }
+        public float Value { get; set; }
+        public Int64 DateTS { get; set; }
     }
 }

@@ -1,48 +1,4 @@
-﻿const dataAcumulado = [
-    { timestamp: 1, value: 35 },
-    { timestamp: 2, value: 75 },
-    { timestamp: 3, value: 72 },
-    { timestamp: 4, value: 42 },
-    { timestamp: 5, value: 38 },
-    { timestamp: 6, value: 22 },
-    { timestamp: 7, value: 25 },
-    { timestamp: 8, value: 65 },
-    { timestamp: 9, value: 62 },
-    { timestamp: 10, value: 52 },
-    { timestamp: 11, value: 30 },
-    { timestamp: 12, value: 38 },
-    { timestamp: 13, value: 35 },
-    { timestamp: 14, value: 64 },
-    { timestamp: 15, value: 63 },
-    { timestamp: 16, value: 72 },
-    { timestamp: 17, value: 68 },
-    { timestamp: 18, value: 82 },
-    { timestamp: 19, value: 70 },
-    { timestamp: 20, value: 61 },
-    { timestamp: 21, value: 55 },
-    { timestamp: 22, value: 52 },
-    { timestamp: 23, value: 49 },
-    { timestamp: 24, value: 50 }
-]
-
-const dataCaudal = [
-    { timestamp: 1, value: 3 },
-    { timestamp: 2, value: 5 },
-    { timestamp: 3, value: 2 },
-    { timestamp: 4, value: 2 },
-    { timestamp: 5, value: 8 },
-    { timestamp: 6, value: 2 },
-    { timestamp: 7, value: 5 },
-    { timestamp: 8, value: 5 },
-    { timestamp: 9, value: 2 },
-    { timestamp: 10, value: 2 },
-    { timestamp: 11, value: 0 },
-    { timestamp: 12, value: 8 }
-]
-
-
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
     createGraph("Acumulado", 0);
 
@@ -55,14 +11,20 @@ $(document).ready(function () {
     })
 
     //TO-DO: change chart type
-    $('#tipo-grafico').on('change', (e) => { createGraph(e.target.value,0) })
+    $('#tipo-grafico').on('change', (e) => {
+        let interval = $('#graph-time-intervals > .active')[0].value
+        console.log('org interval', interval, $('#graph-time-intervals > .active')[0])
+        //Como el value debería ser el index del boton, igual nos renta mas tirar simplemente por texto
+        createGraph(e.target.value, interval)
+    })
     //Ejemplo de petición ajax al controlador
     $('#btn-test-api').on('click', function () {
         $.ajax({
-            url: '/Home/DoSomething',
+            url: '/Home/GetDataAcumulado',
             type: 'GET',
             success: function (response) {
                 console.log(response)
+                
             },
             error: function (xhr, status, error) {
                 console.error('Error: ' + error)
@@ -84,9 +46,9 @@ $(document).ready(function () {
  */
 function changeGraphInterval(selector) {
 
-    let dataSource = $('#devexpress-container').dxChart('getDataSource');
-    dataSource.filter(['timestamp', '<', selector * selector+5]);
-    dataSource.load();
+    //let dataSource = $('#devexpress-container').dxChart('getDataSource');
+    //dataSource.filter(['timestamp', '<', selector * selector+5]);
+    //dataSource.load();
 }
 
 /**
@@ -95,20 +57,27 @@ function changeGraphInterval(selector) {
  * @param {any} type
  * @param {any} interval
  */
-function createGraph(type, interval) {
-    let data
+async function createGraph(type, interval) {
+    let data;
+    let dataRaw;
+    let start = calculateStart(interval);
+    let end = new Date();
+    //the only time end is not now, is if its a custom interval
     switch (type) {
         case 'Acumulado':
-            data = dataAcumulado;
+            dataRaw = await getDataAcumulado(start, end);
+            console.log(dataRaw)
+            data = dataRaw.accumulatedFlowData.data;
             break;
         case 'Caudal':
-            data = dataCaudal;
+            dataRaw = await getDataCaudal(start, end);
+            data = dataRaw.flowRateData.data;
             break;
     }
     $('#devexpress-container').dxChart({
         dataSource: data,
         series: {
-            argumentField: 'timestamp',
+            argumentField: 'dateTS',
             valueField: 'value',
             name: 'Acumulado',
             border: {
@@ -123,8 +92,67 @@ function createGraph(type, interval) {
             horizontalAlignment: "center",
             verticalAlignment: "bottom"
         },
+        argumentAxis: {
+            label: {
+                format: function (value) {
+                    return new Date(value ).toLocaleTimeString(navigator.language, {hour:'2-digit', minute:'2-digit'});
+                }
+            }
+        },
         commonSeriesSettings: {
             type: 'area'
         }
     });
+}
+
+
+async function getDataAcumulado(start, end) {
+    console.log(start, end);
+    let data = await $.ajax({
+        url: '/Home/GetDataAcumulado',
+        type: 'GET',
+        data: {start:start, end:end},
+        success: function (response) {},
+        error: function (xhr, status, error) {
+            console.error('Error: ' + error)
+        }
+    });
+    return data;
+}
+async function getDataCaudal(start, end) {
+    console.log(start,end);
+    let data = await $.ajax({
+        url: '/Home/GetDataCaudal',
+        type: 'GET',
+        data: { start: start, end: end },
+        success: function (response) {},
+        error: function (xhr, status, error) {
+            console.error('Error: ' + error)
+        }
+    });
+    return data;
+}
+
+function calculateStart(interval) {
+    console.log('calculateStart interval: ', interval)
+    /*
+    0 for 24 hours
+    * 1 for 48 hours
+    * 2 for 7 days
+    * 3 for 30 days
+    * 4 for custom time frame(open calendar)
+    * */
+    switch (interval) {
+        case 0:
+            return new Date() - 24 * 3600 * 1000
+        case 1:
+            return new Date() - 48 * 3600 * 1000
+        case 2:
+            return new Date() - 24 * 3600 * 1000 * 7
+        case 3:
+            return new Date() - 24 * 3600 * 1000 * 30
+        case 4:
+        default:
+            return null;
+    }
 }

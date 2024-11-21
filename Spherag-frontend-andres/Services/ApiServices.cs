@@ -6,8 +6,8 @@ namespace Spherag_frontend_andres.Services
     public interface IApiService {
 
         Task<AuthResponse> POSTLoginToken();
-        Task<ApiResponse> GETCaudal(string Token);
-        Task<ApiResponse> GETAcumulado(string Token);
+        Task<ApiResponse> GETCaudal(string Token, Int64 start, Int64 end);
+        Task<ApiResponse> GETAcumulado(string Token, Int64 start, Int64 end);
     }
     public class ApiServices : IApiService
     {
@@ -18,16 +18,16 @@ namespace Spherag_frontend_andres.Services
         } 
 
 
-        public async Task<ApiResponse> GETCaudal(string Token) {
-            string url = @"https://apicore.spherag.com/AtlasElement/Monitoring/92/1/0730805467000/1730805467000";
+        public async Task<ApiResponse> GETCaudal(string Token, Int64 start, Int64 end) {
+            string url = $@"https://apicore.spherag.com/AtlasElement/Monitoring/92/1/{start}/{end}";
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
             var response = await _httpClient.GetAsync(url);
             var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
             return apiResponse;
         }
 
-        public async Task<ApiResponse> GETAcumulado(string Token) {
-            string url = @"https://apicore.spherag.com/AtlasElement/Monitoring/92/2/0730805467000/1730805467000";
+        public async Task<ApiResponse> GETAcumulado(string Token, Int64 start, Int64 end) {
+            string url = $@"https://apicore.spherag.com/AtlasElement/Monitoring/92/2/{start}/{end}";
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
             var response = await _httpClient.GetAsync(url);
             var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
