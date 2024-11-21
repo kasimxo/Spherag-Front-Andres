@@ -23,9 +23,9 @@ namespace Spherag_frontend_andres.Controllers
 
         [HttpGet]
         public async Task<IActionResult> DoSomething() {
-            var test = await _apiService.POSTLoginToken();
-            String data = "hola";
-            return Json(data);
+            var authToken = await _apiService.POSTLoginToken();
+            var data = await _apiService.GETAcumulado(authToken.AccessToken.Token);
+            return new JsonResult(data);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

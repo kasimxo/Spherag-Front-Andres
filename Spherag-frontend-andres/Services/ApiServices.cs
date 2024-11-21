@@ -4,8 +4,10 @@ using System.Text.Json;
 namespace Spherag_frontend_andres.Services
 {
     public interface IApiService {
-        Task<Object> GetDataAsync(string parameter);
-        Task<Object> POSTLoginToken();
+
+        Task<AuthResponse> POSTLoginToken();
+        Task<ApiResponse> GETCaudal(string Token);
+        Task<ApiResponse> GETAcumulado(string Token);
     }
     public class ApiServices : IApiService
     {
@@ -13,13 +15,26 @@ namespace Spherag_frontend_andres.Services
         public ApiServices(HttpClient httpClient)
         {
             _httpClient = httpClient;
-        }
-        public Task<object> GetDataAsync(string parameter)
-        {
-            throw new NotImplementedException();
+        } 
+
+
+        public async Task<ApiResponse> GETCaudal(string Token) {
+            string url = @"https://apicore.spherag.com/AtlasElement/Monitoring/92/1/0730805467000/1730805467000";
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
+            var response = await _httpClient.GetAsync(url);
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            return apiResponse;
         }
 
-        public async Task<object> POSTLoginToken() {
+        public async Task<ApiResponse> GETAcumulado(string Token) {
+            string url = @"https://apicore.spherag.com/AtlasElement/Monitoring/92/2/0730805467000/1730805467000";
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
+            var response = await _httpClient.GetAsync(url);
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            return apiResponse;
+        }
+
+        public async Task<AuthResponse> POSTLoginToken() {
 
             //No necesitamos parámetros porque la url siempre será
             //la misma y el contenido también.
@@ -36,9 +51,9 @@ namespace Spherag_frontend_andres.Services
 
             var response = await _httpClient.PostAsync(url, content);
             response.EnsureSuccessStatusCode();
-            throw new Exception(await response.Content.ReadAsStringAsync());
-            var data = new Object();
-            return (Task<object>)data;
+            var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>();
+            
+            return authResponse;
         }
     }
 }
