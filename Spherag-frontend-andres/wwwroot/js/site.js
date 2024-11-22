@@ -45,6 +45,7 @@ function changeGraphInterval(selector) {
  */
 async function createGraph(type, interval) {
     let data;
+    let logs;
     let dataRaw;
     let start = calculateStart(interval);
     let end = new Date()-0;
@@ -54,10 +55,12 @@ async function createGraph(type, interval) {
             dataRaw = await getDataAcumulado(start, end);
             console.log(dataRaw)
             data = dataRaw.accumulatedFlowData.data;
+            logs = dataRaw.accumulatedFlowData.logs;
             break;
         case 'Caudal':
             dataRaw = await getDataCaudal(start, end);
             data = dataRaw.flowRateData.data;
+            logs = dataRaw.flowRateData.logs;
             break;
     }
     $('#devexpress-container').dxChart({
@@ -89,8 +92,55 @@ async function createGraph(type, interval) {
             type: 'area'
         }
     });
+
+    let table = $('#logs-table > tbody')
+    table.empty()
+    logs.forEach((el, index) => {
+        let icon 
+        let msg = infoMsg(el.resultAction)
+        let data = el.data.value ? el.data.value : '';
+        let date = new Date(el.dateTS);
+        let days = date.toLocaleDateString();
+        let hours = date.getUTCHours().toString().padStart(2, '0');
+        let mins = date.getUTCMinutes().toString().padStart(2, '0');
+        let secs = date.getUTCSeconds().toString().padStart(2, '0');
+        if (!!el.origin) {
+            icon = '<img src="static/person-circle.svg" class="nav-icon" />';
+        }
+        table.append('<tr><td>' + icon + '</td><td>' + msg + '</td><td>' + data + '</td><td>' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
+    })
+    
 }
 
+function infoMsg(resultAction) {
+    let actions = [
+        "Ninguno",
+        "Eliminación",
+        "Creación",
+        "Edición",
+        "Clonación",
+        "Cambio modo energía a tiempo real",
+        "Cambio modo energía a eco",
+        "Cambio modo energía a reposo",
+        "En reposo",
+        "Despertar",
+        "Creación de elemento",
+        "Eliminación de elemento",
+        "Edición de elemento",
+        "Apertura manual",
+        "Apertura automática",
+        "Cierre manual",
+        "Cierre automático",
+        "Cambio de modo a automático",
+        "Cambio de modo a manual",
+        "Actualización de valor",
+        "Crear alarma",
+        "Editar alarma",
+        "Eliminar alarma",
+        "Disparar alarma"
+    ];
+    return actions[resultAction];
+}
 
 async function getDataAcumulado(start, end) {
     console.log("start: ",start,"end: ", end);
