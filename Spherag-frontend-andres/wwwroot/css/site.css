@@ -31,20 +31,7 @@ body {
     width: 100%;
 }
 
-.header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 10%;
-    width: 100%;
-}
 
-.nav-menu {
-    display: flex;
-    flex-direction: column;
-    width: 10%;
-    height: auto;
-}
 
 .nav-icon {
     width: 40px;

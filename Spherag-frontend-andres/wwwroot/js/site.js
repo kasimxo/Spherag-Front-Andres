@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
 
-    createGraph("Acumulado", 0);
+    createGraph("Acumulado", "24 H");
 
     $('#graph-time-intervals').children().each(function (index) {
         $(this).on('click', (btn) => {
@@ -17,21 +17,6 @@
         console.log('org interval', interval, $('#graph-time-intervals > .active')[0])
         //Como el value debería ser el index del boton, igual nos renta mas tirar simplemente por texto
         createGraph(e.target.value, interval)
-    })
-    //Ejemplo de petición ajax al controlador
-    $('#btn-test-api').on('click', function () {
-        $.ajax({
-            url: '/Home/GetDataAcumulado',
-            type: 'GET',
-            success: function (response) {
-                console.log(response)
-                
-            },
-            error: function (xhr, status, error) {
-                console.error('Error: ' + error)
-
-            }
-        })
     })
 });
 

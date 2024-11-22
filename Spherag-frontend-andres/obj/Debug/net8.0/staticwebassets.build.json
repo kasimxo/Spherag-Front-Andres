@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "BMuJBmC2s0Lk8NLS9ubaWpLM8WYJDtQ4aZuYppDQmjE=",
+  "Hash": "BHMS+Z6KNL5SPbz+UxJg8uBjSP0egDw6/1dh51mMMAY=",
   "Source": "Spherag-frontend-andres",
   "BasePath": "_content/Spherag-frontend-andres",
   "Mode": "Default",
@@ -2086,6 +2086,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\static\\calendar3.svg"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\chevron-left.svg",
+      "SourceId": "Spherag-frontend-andres",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\",
+      "BasePath": "_content/Spherag-frontend-andres",
+      "RelativePath": "static/chevron-left.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\static\\chevron-left.svg"
     },
     {
       "Identity": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\clock.svg",

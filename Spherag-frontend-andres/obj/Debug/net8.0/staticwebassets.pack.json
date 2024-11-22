@@ -437,6 +437,10 @@
       "PackagePath": "staticwebassets\\static\\calendar3.svg"
     },
     {
+      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\chevron-left.svg",
+      "PackagePath": "staticwebassets\\static\\chevron-left.svg"
+    },
+    {
       "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\clock.svg",
       "PackagePath": "staticwebassets\\static\\clock.svg"
     },
