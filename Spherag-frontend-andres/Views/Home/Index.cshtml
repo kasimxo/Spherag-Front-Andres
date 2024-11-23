@@ -4,25 +4,24 @@
 
 <div class="text-center">
     <div class="container-fluid d-flex flex-row">
-        
-            <main class="page-content">
-                <div class="container d-flex flex-row">
-                    <button type="button">
-                        <img src="~/static/chevron-left.svg" class="nav-icon">
+            <main class="page-content bg-white rounded shadow-sm">
+                <div class="container d-flex flex-row p-0">
+                    <button type="button" class="btn">
+                        <i class="bi bi-chevron-left bg-info h1 ms-2 px-1 rounded align-content-center" style="--bs-bg-opacity: .5;"></i>
                     </button>
                     <div class="container">
                         <h3 class="text-start">Nombre del contador</h3>
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item">Finca</li>
+                                <li class="breadcrumb-item"><i class="bi bi-geo-alt py-1 text-secondary"></i> Finca</li>
                                 <li class="breadcrumb-item">Atlas</li>
                                 <li class="breadcrumb-item">Nombre de Atlas</li>
-                                <li class="breadcrumb-item">Nombre del contador</li>
+                                <li class="breadcrumb-item"><b>Nombre del contador</b></li>
                             </ol>
                         </nav>
                     </div>
                 </div>
-                <div class="container">
+            <div class="container bg-secondary p-2 rounded" style="--bs-bg-opacity: .1;">
                     <div class="row align-items-center">
                         <div class="col">
                             <div class="card">
@@ -58,7 +57,8 @@
                 <div class="container-fluid d-flex flex-row">
                     <div class="container">
                         <!-- Sección del gráfico y tipo de gráfico -->
-                        <div class="container" >
+                    <div class="container d-flex flex-column">
+                            <label for="tipo-grafico" class="text-start">Tipo de gráfico</label>
                             <select id='tipo-grafico' class="form-select" aria-label="Default select example" >
                                 <option value='Acumulado' selected>Acumulado</option>
                                 <option value="Caudal">Caudal</option>
@@ -68,19 +68,27 @@
                     </div>
                     <div class="container">
                         <!-- Sección de última conexión, 24 h, mensaje etc-->
-                         <p>Última conexión:</p>
+                        <div class="container d-flex flex-row justify-content-end p-0">
+                            <div>
+                            <p class="text-end"><b>Última conexión:</b> 02/11/2023 11:30:22</p>
+                                <p class="text-end"><i class="bi bi-globe-americas"></i> GMT Finca: +01</p>
+                            </div>
+                            <button type="button" class="btn">
+                                <i class="bi bi-arrow-repeat bg-info h1 ms-2 px-1 rounded align-content-center" style="--bs-bg-opacity: .5;"></i>
+                            </button>
+                        </div>
                          <div id="graph-time-intervals" class="list-group list-group-horizontal">
                             <button type="button" class="list-group-item list-group-item-action active" aria-current="true">24 H</button>
                             <button type="button" class="list-group-item list-group-item-action">48 H</button>
                             <button type="button" class="list-group-item list-group-item-action">7 D</button>
                             <button type="button" class="list-group-item list-group-item-action">30 D</button>
-                            <button type="button" class="list-group-item list-group-item-action">Cal</button>
+                            <button type="button" class="list-group-item list-group-item-action"><i class="bi bi-calendar3 py-1 text-secondary"></i></button>
                          </div>
                          <table id="logs-table" class="table">
                             <thead>
                                 <tr>
                                     <th>
-                                    <img src="static/database.svg" class="nav-icon" />
+                                    <i class="bi bi-database py-1 text-secondary"></i>
                                     </th>
                                     <th>Mensaje</th>
                                     <th>Dato</th>

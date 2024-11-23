@@ -105,7 +105,7 @@ async function createGraph(type, interval) {
         let mins = date.getUTCMinutes().toString().padStart(2, '0');
         let secs = date.getUTCSeconds().toString().padStart(2, '0');
         if (!!el.origin) {
-            icon = '<img src="static/person-circle.svg" class="nav-icon" />';
+            icon = '<i class="bi bi-person py-1 text-secondary"></i>';
         }
         table.append('<tr><td>' + icon + '</td><td>' + msg + '</td><td>' + data + '</td><td>' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
     })
