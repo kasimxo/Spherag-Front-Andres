@@ -107,7 +107,7 @@ async function createGraph(type, interval) {
         if (!!el.origin) {
             icon = '<i class="bi bi-person py-1 text-secondary"></i>';
         }
-        table.append('<tr><td>' + icon + '</td><td>' + msg + '</td><td>' + data + '</td><td>' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
+        table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
     })
     
 }
