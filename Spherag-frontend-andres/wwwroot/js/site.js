@@ -1,5 +1,22 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
 
+    
+
+    $('#btn-custom-date-range').on('click', (e) => {
+        $('#range-selection').dxDateRangeBox({
+            value: [new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
+            new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3)],
+            startDate: null,
+            endDate: null,
+            labelMode: "hidden",
+            visible: true,
+        });
+        console.log('Creado date range')
+    });
+
+
+ 
     createGraph("Acumulado", "24 H");
 
     $('#graph-time-intervals').children().each(function (index) {
@@ -11,6 +28,12 @@
         })
     })
 
+    $('#btn-refresh-data').on('click', (e) => {
+        let tipo = $('#tipo-grafico')[0].value
+        let interval = $('#graph-time-intervals > .active')[0].innerText
+        createGraph(tipo, interval);
+    });
+
     //TO-DO: change chart type
     $('#tipo-grafico').on('change', (e) => {
         let interval = $('#graph-time-intervals > .active')[0].innerText
@@ -20,22 +43,6 @@
     })
 });
 
-/**
- * 
- * Function to change time interval in selected graph
- * 0 for 24 hours
- * 1 for 48 hours
- * 2 for 7 days
- * 3 for 30 days
- * 4 for custom time frame (open calendar)
- * @param {any} selector
- */
-function changeGraphInterval(selector) {
-
-    //let dataSource = $('#devexpress-container').dxChart('getDataSource');
-    //dataSource.filter(['timestamp', '<', selector * selector+5]);
-    //dataSource.load();
-}
 
 /**
  * Creates the graph in the page for the specified type and time interval
@@ -44,16 +51,17 @@ function changeGraphInterval(selector) {
  * @param {any} interval
  */
 async function createGraph(type, interval) {
+    
     let data;
     let logs;
     let dataRaw;
     let start = calculateStart(interval);
     let end = new Date()-0;
     //the only time end is not now, is if its a custom interval
+    
     switch (type) {
         case 'Acumulado':
             dataRaw = await getDataAcumulado(start, end);
-            console.log(dataRaw)
             data = dataRaw.accumulatedFlowData.data;
             logs = dataRaw.accumulatedFlowData.logs;
             break;
@@ -63,6 +71,7 @@ async function createGraph(type, interval) {
             logs = dataRaw.flowRateData.logs;
             break;
     }
+    
     $('#devexpress-container').dxChart({
         dataSource: data,
         series: {
@@ -81,6 +90,13 @@ async function createGraph(type, interval) {
             horizontalAlignment: "center",
             verticalAlignment: "bottom"
         },
+        valueAxis: {
+            label: {
+                customizeText: function (info) {
+                    return info.value + " m&sup3;";
+                }
+            }
+        },
         argumentAxis: {
             label: {
                 format: function (value) {
@@ -95,21 +111,22 @@ async function createGraph(type, interval) {
 
     let table = $('#logs-table > tbody')
     table.empty()
-    logs.forEach((el, index) => {
-        let icon 
-        let msg = infoMsg(el.resultAction)
-        let data = el.data.value ? el.data.value : '';
-        let date = new Date(el.dateTS);
-        let days = date.toLocaleDateString();
-        let hours = date.getUTCHours().toString().padStart(2, '0');
-        let mins = date.getUTCMinutes().toString().padStart(2, '0');
-        let secs = date.getUTCSeconds().toString().padStart(2, '0');
-        if (!!el.origin) {
-            icon = '<i class="bi bi-person py-1 text-secondary"></i>';
-        }
-        table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
-    })
-    
+    if (logs !== undefined) {
+        logs.forEach((el, index) => {
+            let icon
+            let msg = infoMsg(el.resultAction)
+            let data = el.data.value ? el.data.value : '';
+            let date = new Date(el.dateTS);
+            let days = date.toLocaleDateString();
+            let hours = date.getUTCHours().toString().padStart(2, '0');
+            let mins = date.getUTCMinutes().toString().padStart(2, '0');
+            let secs = date.getUTCSeconds().toString().padStart(2, '0');
+            if (!!el.origin) {
+                icon = '<i class="bi bi-person py-1 text-secondary"></i>';
+            }
+            table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
+        })
+    }
 }
 
 function infoMsg(resultAction) {
@@ -148,9 +165,11 @@ async function getDataAcumulado(start, end) {
         url: '/Home/GetDataAcumulado',
         type: 'GET',
         data: {start:start, end:end},
-        success: function (response) {},
+        success: function (response) {
+            console.log('Petición exitosa: '+start,end,response)
+        },
         error: function (xhr, status, error) {
-            console.error('Error: ' + error)
+            console.error('Error: ' + error + " Estado: " + status)
         }
     });
     return data;
@@ -161,7 +180,9 @@ async function getDataCaudal(start, end) {
         url: '/Home/GetDataCaudal',
         type: 'GET',
         data: { start: start, end: end },
-        success: function (response) {},
+        success: function (response) {
+            console.log('Exito caudal ', response)
+        },
         error: function (xhr, status, error) {
             console.error('Error: ' + error)
         }

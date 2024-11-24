@@ -24,15 +24,15 @@ namespace Spherag_frontend_andres.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDataCaudal(Int64 start, Int64 end)
         {
-            var authToken = await _apiService.POSTLoginToken();
-            var data = await _apiService.GETCaudal(authToken.AccessToken.Token, start,end);
+            
+            var data = await _apiService.GETCaudal( start,end);
             return new JsonResult(data);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetDataAcumulado(Int64 start, Int64 end) {
-            var authToken = await _apiService.POSTLoginToken();
-            var data = await _apiService.GETAcumulado(authToken.AccessToken.Token, start, end);
+            
+            var data = await _apiService.GETAcumulado(start, end);
             return new JsonResult(data);
         }
 
