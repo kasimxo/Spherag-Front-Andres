@@ -13,13 +13,12 @@ namespace Spherag_frontend_andres.Services
     {
         private readonly HttpClient _httpClient;
         private AuthResponse? _token;
-        public ApiServices(HttpClient httpClient)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ApiServices(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
-            
+            _httpContextAccessor = httpContextAccessor;
         } 
-
-
         public async Task<ApiResponse> GETCaudal(Int64 start, Int64 end) {
             await EnsureLogin();
             string url = $@"https://apicore.spherag.com/AtlasElement/Monitoring/92/1/{start}/{end}";
@@ -40,45 +39,24 @@ namespace Spherag_frontend_andres.Services
         }
 
         private async Task EnsureLogin() {
-            if (_token == null)
+
+            var token = _httpContextAccessor.HttpContext.Request.Cookies["AuthToken"];
+
+            if (token == null)
             {
                 Debug.WriteLine("Token is null");
                 await POSTLoginToken();
-            }
-            else if (IsExpired(_token.AccessToken.Expiration))
-            {
-                Debug.WriteLine("Token is expired");
-                await RefreshToken();
-            }
-            else {
+            } else {
                 Debug.WriteLine("Token is fine");
+                _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
         }
         private async Task RefreshToken()
         {
-            if (IsExpired(_token!.RefreshToken.Expiration))
-            {
-                await POSTLoginToken();
-            } else
-            {
-                //Lacking url for refreshing token
-                await POSTLoginToken();
-            }
+            throw new NotImplementedException();
             
         }
-        private Boolean IsExpired(string date) {
-            DateTime expirationDate = DateTime.Parse(date);
-            if (DateTime.UtcNow > expirationDate) {
-                return true;
-            }
-            return false;
-        }
         private async Task  POSTLoginToken() {
-
-            //No necesitamos parámetros porque la url siempre será
-            //la misma y el contenido también.
-            //Estos datos los guardaremos en algún archivo .conf
-
             string url = @"https://api.spherag.com/Authentication/Login";
 
             string body = @"{
@@ -91,6 +69,16 @@ namespace Spherag_frontend_andres.Services
             var response = await _httpClient.PostAsync(url, content);
             response.EnsureSuccessStatusCode();
             _token = await response.Content.ReadFromJsonAsync<AuthResponse>();
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.Parse(_token.AccessToken.Expiration)
+            };
+
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("AuthToken", _token.AccessToken.Token, cookieOptions);
+
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _token.AccessToken.Token);
             return;
         }

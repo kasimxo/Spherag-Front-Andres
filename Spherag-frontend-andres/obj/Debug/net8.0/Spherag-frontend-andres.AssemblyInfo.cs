@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Spherag-frontend-andres")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d3db7e01361b62da2a431f4c6d588196bab6b8f6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fa336e3b2c8b028d127f2e11bf47094819f9e23f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Spherag-frontend-andres")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Spherag-frontend-andres")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
