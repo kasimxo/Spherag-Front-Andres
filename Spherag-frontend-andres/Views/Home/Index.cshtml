@@ -5,9 +5,9 @@
 <div class="text-center">
     <div class="container-fluid d-flex flex-row p-0">
         <main class="page-content bg-white rounded shadow-sm px-4 py-3">
-            <div class="container d-flex flex-row p-0 m-0">
-                <button type="button" class="btn p-0 bg-info" style="--bs-bg-opacity: .5;">
-                    <i class="bi bi-chevron-left h1 px-1 rounded align-content-center" style=""></i>
+            <div class="container d-flex flex-row p-0 m-0 mb-3">
+                <button type="button" class="btn p-0 bg-info btn-sm" style="color:#2a3671;--bs-bg-opacity: .5;">
+                    <i class="bi bi-chevron-left h3 px-2 rounded align-content-center" style=""></i>
                 </button>
                 <div class="container">
                     <h5 class="text-start m-0" style="color:#2a3671;">Nombre del contador</h5>
@@ -46,7 +46,7 @@
                                     <p class="text-start mb-0" style="color:#2a3671;">Atlas 01<br><small>Salida conector 1</small></p>
                                 </div>
                                 <div class="col text-end">
-                                    <span class="badge rounded-pill bg-success text-success" style="--bs-bg-opacity: .1;color:#2a3671;"><i class="bi bi-battery-full"></i> 99% <i class="bi bi-reception-4"></i></span>
+                                    <span id="battery-signal" class="badge rounded-pill bg-success text-success" style="--bs-bg-opacity: .1;color:#2a3671;"><i class="bi bi-battery-full"></i> 99% <i class="bi bi-reception-4"></i></span>
                                     <p class="text-end mb-0" style="color:#2a3671;">123456789</p>
                                 </div>
                             </div>
@@ -69,11 +69,11 @@
                 <div class="container col-4 p-0">
                     <!-- Sección de última conexión, 24 h, mensaje etc-->
                     <div class="container d-flex flex-row justify-content-end p-0">
-                        <div class="d-flex flex-column  justify-content-center">
-                            <p class="text-end mb-0 align-center" style="color:#2a3671;"><b>Última conexión:</b> 02/11/2023 11:30:22<br><i class="bi bi-globe-americas"></i> GMT Finca: +01</p>
+                        <div class="d-flex flex-column justify-content-center me-3">
+                            <p id="text-last-connection" class="text-end mb-0 align-center" style="color:#2a3671;"><b>Última conexión:</b> 02/11/2023 11:30:22<br><i class="bi bi-globe-americas"></i> GMT Finca: +01</p>
                         </div>
-                        <button id="btn-refresh-data" type="button" class="btn bg-info " style="color:#2a3671;--bs-bg-opacity: .5;">
-                            <i class="bi bi-arrow-repeat h1  px-1 rounded align-content-center"></i>
+                        <button id="btn-refresh-data" type="button" class="btn btn-sm bg-info px-1 rounded-3" style="color:#2a3671;--bs-bg-opacity: .5;">
+                            <i class="bi bi-arrow-repeat  h3 align-content-center"></i>
                         </button>
                     </div>
                     <div id="graph-time-intervals" class="list-group list-group-horizontal my-3">

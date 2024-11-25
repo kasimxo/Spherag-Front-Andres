@@ -160,7 +160,11 @@ async function createGraph(type, interval) {
     let logs;
     let dataRaw;
     let start = calculateStart(interval);
-    let end = new Date()-0;
+    let end = new Date() - 0;
+    let gmt;
+    let battery;
+    let signal;
+    let lastUpdatedDate;
     //the only time end is not now, is if its a custom interval
     
     switch (type) {
@@ -168,11 +172,19 @@ async function createGraph(type, interval) {
             dataRaw = await getDataAcumulado(start, end);
             data = dataRaw.accumulatedFlowData.data;
             logs = dataRaw.accumulatedFlowData.logs;
+            gmt = dataRaw.gmt;
+            lastUpdatedDate = dataRaw.lastUpdatedDate;
+            battery = dataRaw.batteryPercentage;
+            signal = dataRaw.signalPercentage;
             break;
         case 'Caudal':
             dataRaw = await getDataCaudal(start, end);
             data = dataRaw.flowRateData.data;
             logs = dataRaw.flowRateData.logs;
+            gmt = dataRaw.gmt;
+            lastUpdatedDate = dataRaw.lastUpdatedDate;
+            battery = dataRaw.batteryPercentage;
+            signal = dataRaw.signalPercentage;
             break;
     }
     
@@ -231,6 +243,30 @@ async function createGraph(type, interval) {
             table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
         })
     }
+    let batteryIcon;
+    if (battery > 80) {
+        batteryIcon = '<i class="bi bi-battery-full"></i> '
+    } else if (battery < 20) {
+        batteryIcon = '<i class="bi bi-battery"></i> '
+    } else {
+        batteryIcon = '<i class="bi bi-battery-half"></i> '
+    }
+
+    let signalIcon;
+    if (signal > 80) {
+        signalIcon = '% <i class="bi bi-reception-4"></i>'
+    } else if (signal > 60) {
+        signalIcon = '% <i class="bi bi-reception-3"></i>'
+    } else if (signal > 40) {
+        signalIcon = '% <i class="bi bi-reception-2"></i>'
+    } else if (signal > 20) {
+        signalIcon = '% <i class="bi bi-reception-1"></i>'
+    } else {
+        signalIcon = '% <i class="bi bi-reception-0"></i>'
+    }
+    $('#battery-signal').html(batteryIcon + battery + signalIcon);
+    console.log($('#battery-signal'))
+    $('#text-last-connection').html('<b>Última conexión:</b> ' + new Date(lastUpdatedDate).toLocaleString('es-ES') + '<br/><i class="bi bi-globe-americas"></i> GMT Finca: ' + gmt +'</p>');
 }
 
 function infoMsg(resultAction) {
