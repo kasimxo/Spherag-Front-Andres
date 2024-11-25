@@ -1,37 +1,34 @@
 ﻿
 $(document).ready(function () {
 
-    
-
     $('#btn-custom-date-range').on('click', (e) => {
-        $('#range-selection').dxDateRangeBox({
-            value: [new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
-            new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 3)],
-            startDate: null,
-            endDate: null,
-            labelMode: "hidden",
-            visible: true,
-        });
-        console.log('Creado date range')
+        
     });
 
-
- 
     createGraph("Acumulado", "24 H");
 
     $('#graph-time-intervals').children().each(function (index) {
         $(this).on('click', (btn) => {
-            let tipo = $('#tipo-grafico')[0].value
-            createGraph(tipo, this.innerText)
-            $('#graph-time-intervals > .active').removeClass('active')
-            $(this).addClass('active')
+            if (index !== 4) {
+                let tipo = $('#tipo-grafico')[0].value
+                createGraph(tipo, this.innerText)
+                $('#graph-time-intervals > .active').removeClass('active')
+                let container = $('#date-selection-container');
+                container.removeClass('d-flex');
+                container.addClass('d-none');
+                $(this).addClass('active')
+            } else {
+                $('#graph-time-intervals > .active').removeClass('active');
+                $(this).addClass('active');
+                datePickerFrom();
+            }
         })
     })
 
     $('#btn-refresh-data').on('click', (e) => {
-        let tipo = $('#tipo-grafico')[0].value
+        let type = $('#tipo-grafico')[0].value
         let interval = $('#graph-time-intervals > .active')[0].innerText
-        createGraph(tipo, interval);
+        createGraph(type, interval);
     });
 
     //TO-DO: change chart type
@@ -50,8 +47,115 @@ $(document).ready(function () {
  * @param {any} type
  * @param {any} interval
  */
+
+function datePickerFrom() {
+    let from = 0;
+    let to;
+    let label = $("#date-selection-label");
+    let container = $('#date-selection-container');
+    let datepicker = $('#date-selection');
+    container.removeClass('d-none');
+    container.addClass('d-flex');
+    label.text("Fecha desde");
+    datepicker.dxCalendar({
+        min: from,
+        max: new Date(),
+        onValueChanged: function (e) {
+            if (from === 0) {
+                from = e.value.getTime();
+                label.text("Fecha hasta");
+                console.log(from, e)
+                datepicker.dxCalendar('instance').option('min', from);
+            } else {
+                let type = $('#tipo-grafico')[0].value;
+                createCustomGraph(type, from, e.value.getTime())
+                datepicker.dxCalendar('dispose');
+                container.removeClass('d-flex');
+                container.addClass('d-none');
+            }
+            return;
+        }
+    });
+    console.log('Creado date range ', from)
+}
+
+async function createCustomGraph(type, start, end) {
+    console.log('Creadon custom graph', start, end)
+    let data;
+    let logs;
+    let dataRaw;
+
+    switch (type) {
+        case 'Acumulado':
+            dataRaw = await getDataAcumulado(start, end);
+            data = dataRaw.accumulatedFlowData.data;
+            logs = dataRaw.accumulatedFlowData.logs;
+            break;
+        case 'Caudal':
+            dataRaw = await getDataCaudal(start, end);
+            data = dataRaw.flowRateData.data;
+            logs = dataRaw.flowRateData.logs;
+            break;
+    }
+
+    $('#devexpress-container').dxChart({
+        dataSource: data,
+        series: {
+            argumentField: 'dateTS',
+            valueField: 'value',
+            name: 'Acumulado',
+            border: {
+                color: 'blue',
+                width: 3,
+                visible: true
+            }
+        },
+        legend: {
+            itemTextPosition: 'right',
+            position: "outside",
+            horizontalAlignment: "center",
+            verticalAlignment: "bottom"
+        },
+        valueAxis: {
+            label: {
+                customizeText: function (info) {
+                    return info.value + " m&sup3;";
+                }
+            }
+        },
+        argumentAxis: {
+            label: {
+                format: function (value) {
+                    return new Date(value).toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
+                }
+            }
+        },
+        commonSeriesSettings: {
+            type: 'area'
+        }
+    });
+
+    let table = $('#logs-table > tbody')
+    table.empty()
+    if (logs !== undefined) {
+        logs.forEach((el, index) => {
+            let icon
+            let msg = infoMsg(el.resultAction)
+            let data = el.data.value ? el.data.value : '';
+            let date = new Date(el.dateTS);
+            let days = date.toLocaleDateString();
+            let hours = date.getUTCHours().toString().padStart(2, '0');
+            let mins = date.getUTCMinutes().toString().padStart(2, '0');
+            let secs = date.getUTCSeconds().toString().padStart(2, '0');
+            if (!!el.origin) {
+                icon = '<i class="bi bi-person py-1 text-secondary"></i>';
+            }
+            table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
+        })
+    }
+}
+
 async function createGraph(type, interval) {
-    
     let data;
     let logs;
     let dataRaw;
