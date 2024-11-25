@@ -6,7 +6,7 @@ El propósito de este proyecto es construir una página que permita la visualiza
 
 ## Instalación:
 
-- A través de un ejecutable:
+- A través de un ejecutable (solo disponible para Windows):
 Puedes instalar y probar el proyecto descargando la carpeta comprimida dentro del apartado Releases de este repositorio. En ella encontrarás un archivo ejecutable con el nombre  "Spherag-frontend-andres".
 
 Al ejecutarlo, automáticamente se podrá acceder a la página introduciendo como dirección web localhost:5000 en cualquier navegador.
