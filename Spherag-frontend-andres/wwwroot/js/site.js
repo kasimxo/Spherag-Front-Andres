@@ -1,12 +1,11 @@
-﻿
+﻿var logs;
+var logsIndex = 0;
 $(document).ready(function () {
-
-    $('#btn-custom-date-range').on('click', (e) => {
-        
-    });
 
     createGraph("Acumulado", "24 H");
 
+    $("#btn-next-logs").on('click', () => { navigateLogs(-1)})
+    $("#btn-prev-logs").on('click', () => { navigateLogs(+1)})
     $('#graph-time-intervals').children().each(function (index) {
         $(this).on('click', (btn) => {
             if (index !== 4) {
@@ -31,26 +30,15 @@ $(document).ready(function () {
         createGraph(type, interval);
     });
 
-    //TO-DO: change chart type
     $('#tipo-grafico').on('change', (e) => {
         let interval = $('#graph-time-intervals > .active')[0].innerText
-        console.log('org interval', interval, $('#graph-time-intervals > .active')[0])
-        //Como el value debería ser el index del boton, igual nos renta mas tirar simplemente por texto
         createGraph(e.target.value, interval)
     })
 });
 
 
-/**
- * Creates the graph in the page for the specified type and time interval
- * Every time we want to change anything about the graph, this method is called
- * @param {any} type
- * @param {any} interval
- */
-
 function datePickerFrom() {
     let from = 0;
-    let to;
     let label = $("#date-selection-label");
     let container = $('#date-selection-container');
     let datepicker = $('#date-selection');
@@ -64,7 +52,6 @@ function datePickerFrom() {
             if (from === 0) {
                 from = e.value.getTime();
                 label.text("Fecha hasta");
-                console.log(from, e)
                 datepicker.dxCalendar('instance').option('min', from);
             } else {
                 let type = $('#tipo-grafico')[0].value;
@@ -76,28 +63,75 @@ function datePickerFrom() {
             return;
         }
     });
-    console.log('Creado date range ', from)
 }
 
 async function createCustomGraph(type, start, end) {
-    console.log('Creadon custom graph', start, end)
     let data;
     let logs;
     let dataRaw;
 
     switch (type) {
         case 'Acumulado':
-            dataRaw = await getDataAcumulado(start, end);
+            dataRaw = await getData(2, start, end);
             data = dataRaw.accumulatedFlowData.data;
             logs = dataRaw.accumulatedFlowData.logs;
             break;
         case 'Caudal':
-            dataRaw = await getDataCaudal(start, end);
+            dataRaw = await getData(2, start, end);
             data = dataRaw.flowRateData.data;
             logs = dataRaw.flowRateData.logs;
             break;
     }
 
+    drawGraph(data);
+    logsIndex = 0;
+    fillLogs(logs);
+
+    let batteryIcon = getBatteryIcon(battery);
+    let signalIcon = getSignalIcon(signal);
+
+    $('#battery-signal').html(batteryIcon + battery + signalIcon);
+    $('#text-last-connection').html('<b>Última conexión:</b> ' + new Date(lastUpdatedDate).toLocaleString('es-ES') + '<br/><i class="bi bi-globe-americas"></i> GMT Finca: ' + gmt + '</p>');
+
+}
+
+async function createGraph(type, interval) {
+    let data;
+    let logsRaw;
+    let dataRaw;
+    let start = calculateStart(interval);
+    let end = new Date() - 0;
+
+    switch (type) {
+        case 'Acumulado':
+            dataRaw = await getData(2, start, end);
+            data = dataRaw.accumulatedFlowData.data;
+            logsRaw = dataRaw.accumulatedFlowData.logs;
+            break;
+        case 'Caudal':
+            dataRaw = await getData(1, start, end);
+            data = dataRaw.flowRateData.data;
+            logsRaw = dataRaw.flowRateData.logs;
+            break;
+    }
+
+    let gmt = dataRaw.gmt;
+    let lastUpdatedDate = dataRaw.lastUpdatedDate;
+    let battery = dataRaw.batteryPercentage;
+    let signal = dataRaw.signalPercentage;
+
+    drawGraph(data)
+    logsIndex = 0;
+    fillLogs(logsRaw)
+
+    let batteryIcon = getBatteryIcon(battery);
+    let signalIcon = getSignalIcon(signal);
+
+    $('#battery-signal').html(batteryIcon + battery + signalIcon);
+    $('#text-last-connection').html('<b>Última conexión:</b> ' + new Date(lastUpdatedDate).toLocaleString('es-ES') + '<br/><i class="bi bi-globe-americas"></i> GMT Finca: ' + gmt + '</p>');
+}
+
+function drawGraph(data) {
     $('#devexpress-container').dxChart({
         dataSource: data,
         series: {
@@ -134,139 +168,84 @@ async function createCustomGraph(type, start, end) {
             type: 'area'
         }
     });
-
+}
+function navigateLogs(num) {
+    logsIndex += num * 5
+    if (logsIndex < 0) {
+        logsIndex = 0;
+    }
+    if (logsIndex > logs.length) {
+        logsIndex -= 5;
+    }
     let table = $('#logs-table > tbody')
     table.empty()
     if (logs !== undefined) {
-        logs.forEach((el, index) => {
+
+        for (let i = logsIndex; i < logsIndex + 5; i++) {
+            let log = logs[i]
             let icon
-            let msg = infoMsg(el.resultAction)
-            let data = el.data.value ? el.data.value : '';
-            let date = new Date(el.dateTS);
+            let msg = infoMsg(log.resultAction)
+            let data = log.data.value ? log.data.value : '';
+            let date = new Date(log.dateTS);
             let days = date.toLocaleDateString();
             let hours = date.getUTCHours().toString().padStart(2, '0');
             let mins = date.getUTCMinutes().toString().padStart(2, '0');
             let secs = date.getUTCSeconds().toString().padStart(2, '0');
-            if (!!el.origin) {
+            if (!!log.origin) {
                 icon = '<i class="bi bi-person py-1 text-secondary"></i>';
             }
-            table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
-        })
+            table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end p-0">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
+        }
+    }
+}
+function fillLogs(logsRaw) {
+    logs = logsRaw
+    let table = $('#logs-table > tbody')
+    table.empty()
+    if (logs !== undefined) {
+
+        for (let i = logsIndex; i < logsIndex + 5; i++) {
+            let log = logs[i]
+            let icon
+            let msg = infoMsg(log.resultAction)
+            let data = log.data.value ? log.data.value : '';
+            let date = new Date(log.dateTS);
+            let days = date.toLocaleDateString();
+            let hours = date.getUTCHours().toString().padStart(2, '0');
+            let mins = date.getUTCMinutes().toString().padStart(2, '0');
+            let secs = date.getUTCSeconds().toString().padStart(2, '0');
+            if (!!log.origin) {
+                icon = '<i class="bi bi-person py-1 text-secondary"></i>';
+            }
+            table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end p-0">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
+        }
+    }
+
+}
+
+
+function getBatteryIcon(battery) {
+    if (battery > 80) {
+        return '<i class="bi bi-battery-full"></i> '
+    } else if (battery < 20) {
+        return '<i class="bi bi-battery"></i> '
+    } else {
+        return '<i class="bi bi-battery-half"></i> '
     }
 }
 
-async function createGraph(type, interval) {
-    let data;
-    let logs;
-    let dataRaw;
-    let start = calculateStart(interval);
-    let end = new Date() - 0;
-    let gmt;
-    let battery;
-    let signal;
-    let lastUpdatedDate;
-    //the only time end is not now, is if its a custom interval
-    
-    switch (type) {
-        case 'Acumulado':
-            dataRaw = await getDataAcumulado(start, end);
-            data = dataRaw.accumulatedFlowData.data;
-            logs = dataRaw.accumulatedFlowData.logs;
-            gmt = dataRaw.gmt;
-            lastUpdatedDate = dataRaw.lastUpdatedDate;
-            battery = dataRaw.batteryPercentage;
-            signal = dataRaw.signalPercentage;
-            break;
-        case 'Caudal':
-            dataRaw = await getDataCaudal(start, end);
-            data = dataRaw.flowRateData.data;
-            logs = dataRaw.flowRateData.logs;
-            gmt = dataRaw.gmt;
-            lastUpdatedDate = dataRaw.lastUpdatedDate;
-            battery = dataRaw.batteryPercentage;
-            signal = dataRaw.signalPercentage;
-            break;
-    }
-    
-    $('#devexpress-container').dxChart({
-        dataSource: data,
-        series: {
-            argumentField: 'dateTS',
-            valueField: 'value',
-            name: 'Acumulado',
-            border: {
-                color: 'blue',
-                width: 3,
-                visible: true
-            }
-        },
-        legend: {
-            itemTextPosition: 'right',
-            position: "outside",
-            horizontalAlignment: "center",
-            verticalAlignment: "bottom"
-        },
-        valueAxis: {
-            label: {
-                customizeText: function (info) {
-                    return info.value + " m&sup3;";
-                }
-            }
-        },
-        argumentAxis: {
-            label: {
-                format: function (value) {
-                    return new Date(value ).toLocaleTimeString(navigator.language, {hour:'2-digit', minute:'2-digit'});
-                }
-            }
-        },
-        commonSeriesSettings: {
-            type: 'area'
-        }
-    });
-
-    let table = $('#logs-table > tbody')
-    table.empty()
-    if (logs !== undefined) {
-        logs.forEach((el, index) => {
-            let icon
-            let msg = infoMsg(el.resultAction)
-            let data = el.data.value ? el.data.value : '';
-            let date = new Date(el.dateTS);
-            let days = date.toLocaleDateString();
-            let hours = date.getUTCHours().toString().padStart(2, '0');
-            let mins = date.getUTCMinutes().toString().padStart(2, '0');
-            let secs = date.getUTCSeconds().toString().padStart(2, '0');
-            if (!!el.origin) {
-                icon = '<i class="bi bi-person py-1 text-secondary"></i>';
-            }
-            table.append('<tr><td>' + icon + '</td><td class="text-start">' + msg + '</td><td>' + data + '</td><td class="text-end">' + days + '<br />' + hours + ':' + mins + ':' + secs + '</td></tr>')
-        })
-    }
-    let batteryIcon;
-    if (battery > 80) {
-        batteryIcon = '<i class="bi bi-battery-full"></i> '
-    } else if (battery < 20) {
-        batteryIcon = '<i class="bi bi-battery"></i> '
-    } else {
-        batteryIcon = '<i class="bi bi-battery-half"></i> '
-    }
-
-    let signalIcon;
+function getSignalIcon(signal) {
     if (signal > 80) {
-        signalIcon = '% <i class="bi bi-reception-4"></i>'
+        return '% <i class="bi bi-reception-4"></i>'
     } else if (signal > 60) {
-        signalIcon = '% <i class="bi bi-reception-3"></i>'
+        return '% <i class="bi bi-reception-3"></i>'
     } else if (signal > 40) {
-        signalIcon = '% <i class="bi bi-reception-2"></i>'
+        return '% <i class="bi bi-reception-2"></i>'
     } else if (signal > 20) {
-        signalIcon = '% <i class="bi bi-reception-1"></i>'
+        return '% <i class="bi bi-reception-1"></i>'
     } else {
-        signalIcon = '% <i class="bi bi-reception-0"></i>'
+        return '% <i class="bi bi-reception-0"></i>'
     }
-    $('#battery-signal').html(batteryIcon + battery + signalIcon);
-    console.log($('#battery-signal'))
-    $('#text-last-connection').html('<b>Última conexión:</b> ' + new Date(lastUpdatedDate).toLocaleString('es-ES') + '<br/><i class="bi bi-globe-americas"></i> GMT Finca: ' + gmt +'</p>');
 }
 
 function infoMsg(resultAction) {
@@ -299,12 +278,12 @@ function infoMsg(resultAction) {
     return actions[resultAction];
 }
 
-async function getDataAcumulado(start, end) {
+async function getData(type, start, end) {
     console.log("start: ",start,"end: ", end);
     let data = await $.ajax({
-        url: '/Home/GetDataAcumulado',
+        url: '/Home/GetData',
         type: 'GET',
-        data: {start:start, end:end},
+        data: {type: type, start:start, end:end},
         success: function (response) {
             console.log('Petición exitosa: '+start,end,response)
         },
@@ -314,31 +293,8 @@ async function getDataAcumulado(start, end) {
     });
     return data;
 }
-async function getDataCaudal(start, end) {
-    console.log(start,end);
-    let data = await $.ajax({
-        url: '/Home/GetDataCaudal',
-        type: 'GET',
-        data: { start: start, end: end },
-        success: function (response) {
-            console.log('Exito caudal ', response)
-        },
-        error: function (xhr, status, error) {
-            console.error('Error: ' + error)
-        }
-    });
-    return data;
-}
 
 function calculateStart(interval) {
-    console.log('calculateStart interval: ', interval)
-    /*
-    0 for 24 hours
-    * 1 for 48 hours
-    * 2 for 7 days
-    * 3 for 30 days
-    * 4 for custom time frame(open calendar)
-    * */
     switch (interval) {
         case "24 H":
             return new Date() - 24 * 3600 * 1000

@@ -421,58 +421,6 @@
       "PackagePath": "staticwebassets\\static\\Icon_spherag.png"
     },
     {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\bell.svg",
-      "PackagePath": "staticwebassets\\static\\bell.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\boxes.svg",
-      "PackagePath": "staticwebassets\\static\\boxes.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\caja-cuadrada.png",
-      "PackagePath": "staticwebassets\\static\\caja-cuadrada.png"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\calendar3.svg",
-      "PackagePath": "staticwebassets\\static\\calendar3.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\chevron-left.svg",
-      "PackagePath": "staticwebassets\\static\\chevron-left.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\clock.svg",
-      "PackagePath": "staticwebassets\\static\\clock.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\database.svg",
-      "PackagePath": "staticwebassets\\static\\database.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\gear.svg",
-      "PackagePath": "staticwebassets\\static\\gear.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\info-circle.svg",
-      "PackagePath": "staticwebassets\\static\\info-circle.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\list.svg",
-      "PackagePath": "staticwebassets\\static\\list.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\menu.png",
-      "PackagePath": "staticwebassets\\static\\menu.png"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\person-circle.svg",
-      "PackagePath": "staticwebassets\\static\\person-circle.svg"
-    },
-    {
-      "Id": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\wwwroot\\static\\posicion.png",
-      "PackagePath": "staticwebassets\\static\\posicion.png"
-    },
-    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Spherag-frontend-andres.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

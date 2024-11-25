@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+﻿using Spherag_frontend_andres.Models;
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 
 namespace Spherag_frontend_andres.Services
 {
     public interface IApiService {
-
+        Task<ApiResponse> GETData(Int32 type, Int64 start, Int64 end);
         Task<ApiResponse> GETCaudal(Int64 start, Int64 end);
         Task<ApiResponse> GETAcumulado(Int64 start, Int64 end);
     }
@@ -18,10 +19,19 @@ namespace Spherag_frontend_andres.Services
         {
             _httpClient = httpClient;
             _httpContextAccessor = httpContextAccessor;
-        } 
+        }
+        public async Task<ApiResponse> GETData(Int32 type, Int64 start, Int64 end)
+        {
+            await EnsureLogin();
+            string url = $@"{AppSettings.BaseUrl}/{type}/{start}/{end}";
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            return apiResponse;
+        }
         public async Task<ApiResponse> GETCaudal(Int64 start, Int64 end) {
             await EnsureLogin();
-            string url = $@"https://apicore.spherag.com/AtlasElement/Monitoring/92/1/{start}/{end}";
+            string url = $@"{AppSettings.BaseUrl}/1/{start}/{end}";
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
@@ -30,7 +40,7 @@ namespace Spherag_frontend_andres.Services
 
         public async Task<ApiResponse> GETAcumulado(Int64 start, Int64 end) {
             await EnsureLogin();
-            string url = $@"https://apicore.spherag.com/AtlasElement/Monitoring/92/2/{start}/{end}";
+            string url = $@"{AppSettings.BaseUrl}/2/{start}/{end}";
             Debug.WriteLine("GETAcumulado token: " );
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -54,10 +64,8 @@ namespace Spherag_frontend_andres.Services
         private async Task RefreshToken()
         {
             throw new NotImplementedException();
-            
         }
         private async Task  POSTLoginToken() {
-            string url = @"https://api.spherag.com/Authentication/Login";
 
             string body = @"{
                   ""username"": ""federico.front.test@spherag.com"",
@@ -66,7 +74,7 @@ namespace Spherag_frontend_andres.Services
 
             var content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync(url, content);
+            var response = await _httpClient.PostAsync(AppSettings.AuthenticationUrl, content);
             response.EnsureSuccessStatusCode();
             _token = await response.Content.ReadFromJsonAsync<AuthResponse>();
 

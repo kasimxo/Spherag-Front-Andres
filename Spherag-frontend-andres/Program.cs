@@ -1,3 +1,4 @@
+using Spherag_frontend_andres.Models;
 using Spherag_frontend_andres.Services;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -20,6 +20,13 @@ namespace Spherag_frontend_andres.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetData(Int32 type, Int64 start, Int64 end)
+        {
+
+            var data = await _apiService.GETData(type, start, end);
+            return new JsonResult(data);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetDataCaudal(Int64 start, Int64 end)
