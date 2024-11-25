@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "JIuahXkeApPG+A9TIKwOWYOqWRgj149A9EOE9+LEC9mevgTS5JJSrwZrzVXOZXWPB105u4Eul0pz9zjC3U0eWQ==",
+  "dgSpecHash": "r3Dfsk5dL04fJbJ5p/kzhY7nnZgBICKqWmLa2r8zA/K5L1FlUWWe7JeK9JdMmKGOJHJxXAmT35M0euySwvQK2w==",
   "success": true,
   "projectFilePath": "C:\\Users\\User\\Desktop\\Spherag-frontend-andres\\Spherag-frontend-andres\\Spherag-frontend-andres.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\bootstrap\\5.3.3\\bootstrap.5.3.3.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\jquery\\3.7.1\\jquery.3.7.1.nupkg.sha512"
+    "C:\\Users\\User\\.nuget\\packages\\jquery\\3.7.1\\jquery.3.7.1.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.2\\microsoft.aspnetcore.app.runtime.win-x64.8.0.2.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.2\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.2.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.2\\microsoft.netcore.app.runtime.win-x64.8.0.2.nupkg.sha512"
   ],
   "logs": []
 }

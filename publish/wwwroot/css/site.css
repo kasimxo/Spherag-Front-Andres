@@ -1,0 +1,49 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.spherag-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.page-content {
+    width: 100%;
+}
+
+
+
+.nav-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.user-menu {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #e7dbe7;
+    border-bottom-left-radius: 25px;
+}

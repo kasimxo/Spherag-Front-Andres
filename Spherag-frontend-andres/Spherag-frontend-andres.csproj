@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Spherag_frontend_andres</RootNamespace>
+	  <OutputType>Exe</OutputType>
+  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
